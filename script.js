@@ -17,7 +17,9 @@ function getComputerChoice() {
 
 // this function takes the input via the prompt function, with the assumption of valid input
 function getHumanChoice() {
-    return prompt("Rock, paper, or scissors?", "");
+    const userPrompt = prompt("Rock, paper, or scissors?", "");
+    
+    return userPrompt.toLowerCase();
 }
 
 // this (naive-looking) function determines the outcome of a round, and increments the score of whoever wins

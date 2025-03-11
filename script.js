@@ -18,7 +18,7 @@ function getComputerChoice() {
 // this function takes the input via the prompt function, with the assumption of valid input
 function getHumanChoice() {
     const userPrompt = prompt("Rock, paper, or scissors?", "");
-    
+
     return userPrompt.toLowerCase();
 }
 

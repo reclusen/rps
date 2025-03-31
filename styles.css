@@ -23,13 +23,11 @@ main {
 	align-items: center;
 	font-size: 1.25rem;
 	padding: 15px 0;
-	border: 1px solid blue;
 }
 
 .choices {
 	display: flex;
 	justify-content: center;
-	border: 1px solid #000;
 }
 
 .choices button {
@@ -37,6 +35,15 @@ main {
 	padding: 20px 45px;
 	font-size: 2.5rem;
 	margin: auto;
+	background-color: #111111;
+	color: #f2f2f2;
+	border: 0;
+	border-radius: 100px;
+}
+
+.choices [disabled] {
+	background-color: #808080;
+	color: unset;
 }
 
 .round {

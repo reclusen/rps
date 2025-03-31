@@ -6,7 +6,7 @@ const start = document.querySelector(".start");
 let playerScore = document.querySelector(".player .score");
 let cpuScore = document.querySelector(".cpu .score");
 
-const rounds = document.getElementsByClassName("round-count").item(0);
+const rounds = document.querySelector(".round-count");
 // global variables that keep track of the player score
 let roundCount = 0;
 
@@ -30,24 +30,28 @@ function playRound(playerChoice, cpuChoice) {
     } else if (cpuChoice == "rock") {
         if (playerChoice == "paper") {
             playerScore.innerText++;
+            roundCount++;
         } else if (playerChoice == "scissors") {
             playerScore.innerText++;
+            roundCount++;
         }
     } else if (cpuChoice == "paper") {
         if (playerChoice == "rock") {
             cpuScore.innerText++;
+            roundCount++;
         } else if (playerChoice == "scissors") {
             playerScore++;
+            roundCount++;
         }
     } else if (cpuChoice == "scissors") {
         if (playerChoice == "rock") {
             playerScore.innerText++;
+            roundCount++;
         } else if (playerChoice == "paper") {
             cpuScore.innerText++;
+            roundCount++;
         }
     }
-
-    roundCount++;
 }
 
 function playRPS() {
@@ -60,11 +64,43 @@ function playRPS() {
 
             playRound(playerChoice, cpuChoice);
 
-            p.innerText = `Player chooses ${playerChoice}. CPU chooses ${cpuChoice}.`;
+            p.innerHTML = `Player chooses <span>${playerChoice}</span>. CPU chooses <span>${cpuChoice}</span>.`;
             roundStatus.append(p);
 
+            let span = p.firstElementChild;
+
+            console.log(span.firstChild.textContent);
+
+            switch (span.firstChild.textContent) {
+                case "rock":
+                    span.style.color = "#ff0000";
+                    break;
+                case "paper":
+                    span.style.color = "#00ff00";
+                    break;
+                case "scissors":
+                    span.style.color = "#0000ff";
+                    break;
+            }
+
+            span = p.lastElementChild;
+
+            console.log(span.firstChild.textContent);
+
+            switch (span.firstChild.textContent) {
+                case "rock":
+                    span.style.color = "#ff0000";
+                    break;
+                case "paper":
+                    span.style.color = "#00ff00";
+                    break;
+                case "scissors":
+                    span.style.color = "#0000ff";
+                    break;
+            }
+
             console.log(`cpu: ${cpuChoice} | player: ${playerChoice}`);
-            console.log(`SCORE [cpu: ${cpuScore.innerText} | player: ${playerScore.innerText}]`);
+            console.log(`SCORE [cpu: ${cpuScore.innerText} | player: ${playerScore.innerText}], ${roundCount}`);
 
             if (roundCount == rounds.value) {
                 if (playerScore.innerText > cpuScore.innerText) {
@@ -78,10 +114,8 @@ function playRPS() {
                     p.innerText = "Draw!";
                 }
 
+                choices.forEach((choice) => { choice.toggleAttribute("disabled"); });
                 start.toggleAttribute("disabled");
-                start.addEventListener("click", (e) => {
-                    reset();
-                });
             }
         });
     })
@@ -91,18 +125,5 @@ function playRPS() {
 start.addEventListener("click", (e) => {
     roundStatus.innerText = "Round start."
     start.toggleAttribute("disabled");
-    start.innerText = "Reset";
     playRPS();
 });
-
-//resets score values
-function reset() {
-    cpuScore.innerText = 0;
-    playerScore.innerText = 0;
-    roundCount = 0;
-    start.innerText = "Start";
-
-    console.log(`from reset(): cpu: ${cpuScore.innerText} | player: ${playerScore.innerText}`);
-
-    roundStatus.children.item(0).remove();
-}

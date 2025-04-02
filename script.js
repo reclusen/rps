@@ -1,6 +1,14 @@
+const choices = document.querySelectorAll("button");
+const roundStatus = document.querySelector(".status-box");
+const scoreBoard = document.querySelector(".scoreboard");
+const start = document.querySelector(".start");
+
+let playerScore = document.querySelector(".player .score");
+let cpuScore = document.querySelector(".cpu .score");
+
+const rounds = document.querySelector(".round-count");
 // global variables that keep track of the player score
-let cpuScore = 0;
-let playerScore = 0;
+let roundCount = 0;
 
 // this function relies on randomly generated integers to determine its choice
 function getComputerChoice() {
@@ -15,62 +23,107 @@ function getComputerChoice() {
     }
 }
 
-// this function takes the input via the prompt function, with the assumption of valid input
-function getHumanChoice() {
-    const userPrompt = prompt("Rock, paper, or scissors?", "");
-
-    return userPrompt.toLowerCase();
-}
-
 // this (naive-looking) function determines the outcome of a round, and increments the score of whoever wins
 function playRound(playerChoice, cpuChoice) {
     if (cpuChoice == playerChoice) {
         console.log("<TIE>");
     } else if (cpuChoice == "rock") {
         if (playerChoice == "paper") {
-            playerScore++;
+            playerScore.innerText++;
+            roundCount++;
         } else if (playerChoice == "scissors") {
-            playerScore++;
+            playerScore.innerText++;
+            roundCount++;
         }
     } else if (cpuChoice == "paper") {
         if (playerChoice == "rock") {
-            cpuScore++;
+            cpuScore.innerText++;
+            roundCount++;
         } else if (playerChoice == "scissors") {
             playerScore++;
+            roundCount++;
         }
     } else if (cpuChoice == "scissors") {
         if (playerChoice == "rock") {
-            playerScore++;
+            playerScore.innerText++;
+            roundCount++;
         } else if (playerChoice == "paper") {
-            cpuScore++;
+            cpuScore.innerText++;
+            roundCount++;
         }
     }
 }
 
-// a function that runs the game a fixed number of times
 function playRPS() {
-    for (let i = 1; i <= 5; i++) {
-        // grabs the values from the above functions as input constants
-        // the function getHumanChoice() being in the loop forces the prompt, which allows other user valid input in next iteration
-        const humanChoice = getHumanChoice();
-        const cpuChoice = getComputerChoice();
+    choices.forEach((choice) => {
+        choice.addEventListener("click", (e) => {
+            const playerChoice = e.currentTarget.className;
+            const cpuChoice = getComputerChoice();
+            
+            const p = document.createElement("p");
 
-        console.log(`round #${i}`);
+            playRound(playerChoice, cpuChoice);
 
-        console.log(`cpu: ${cpuChoice} | player: ${humanChoice}`);
-        playRound(humanChoice, cpuChoice);
-        console.log(`SCORE [cpu: ${cpuScore} | player: ${playerScore}]`);
-    }
+            p.innerHTML = `Player chooses <span>${playerChoice}</span>. CPU chooses <span>${cpuChoice}</span>.`;
+            roundStatus.append(p);
 
-    // outputs overall winner to console
-    if (playerScore > cpuScore) {
-        console.log("player wins!");
-    } else if ((playerScore < cpuScore)) {
-        console.log("cpu wins!");
-    } else {
-        console.log("draw!");
-    }
+            let span = p.firstElementChild;
+
+            console.log(span.firstChild.textContent);
+
+            switch (span.firstChild.textContent) {
+                case "rock":
+                    span.style.color = "#ff0000";
+                    break;
+                case "paper":
+                    span.style.color = "#00ff00";
+                    break;
+                case "scissors":
+                    span.style.color = "#0000ff";
+                    break;
+            }
+
+            span = p.lastElementChild;
+
+            console.log(span.firstChild.textContent);
+
+            switch (span.firstChild.textContent) {
+                case "rock":
+                    span.style.color = "#ff0000";
+                    break;
+                case "paper":
+                    span.style.color = "#00ff00";
+                    break;
+                case "scissors":
+                    span.style.color = "#0000ff";
+                    break;
+            }
+
+            console.log(`cpu: ${cpuChoice} | player: ${playerChoice}`);
+            console.log(`SCORE [cpu: ${cpuScore.innerText} | player: ${playerScore.innerText}], ${roundCount}`);
+
+            if (roundCount == rounds.value) {
+                if (playerScore.innerText > cpuScore.innerText) {
+                    console.log("player wins!");
+                    p.innerText = "Player wins!";
+                } else if ((playerScore.innerText < cpuScore.innerText)) {
+                    console.log("cpu wins!");
+                    p.innerText = "CPU wins!";
+                } else {
+                    console.log("draw!");
+                    p.innerText = "Draw!";
+                }
+
+                choices.forEach((choice) => { choice.toggleAttribute("disabled"); });
+                start.toggleAttribute("disabled");
+            }
+        });
+    })
 }
 
-// calls game function
-playRPS();
+//starts round
+start.addEventListener("click", (e) => {
+    roundStatus.innerText = "Round start."
+    start.toggleAttribute("disabled");
+    playRPS();
+});
